@@ -58,7 +58,13 @@ const login_cliente = async function (req, res) {
     }
 }
 
+const listar_clientes_filtro_admin = async function (req, res) { 
+    let reg = await Cliente.find();
+    res.status(200).send({data:reg});
+ }
+
 module.exports = {
     registro_cliente,
-    login_cliente
+    login_cliente,
+    listar_clientes_filtro_admin
 }
