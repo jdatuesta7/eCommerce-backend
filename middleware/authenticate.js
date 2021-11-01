@@ -20,7 +20,7 @@ exports.auth = function(req, res, next){
     }else{
         try {
             var payload = jwt.decode(token, secret);
-            console.log(payload);
+            // console.log(payload);
             if(payload.exp <= moment().unix()){
                 return res.status(403).send({message: 'TokenExpired'});
             }

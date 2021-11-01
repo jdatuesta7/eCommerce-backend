@@ -60,7 +60,89 @@ const login_admin = async function (req, res) {
     }
 }
 
+const listar_vendedores_filtro_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role = 'admin'){
+            let tipo = req.params['tipo'];
+            let filtro = req.params['filtro'];
+
+            if(tipo == 'null' || tipo == null){
+                let vendedores = await Admin.find({rol: new RegExp('vendedor', 'i')});
+                res.status(200).send({
+                    data: vendedores
+                });
+            }else{
+                if(tipo == 'correo'){
+                    let vendedores = await Admin.find({email: new RegExp(filtro, 'i')});
+                    res.status(200).send({
+                        data: vendedores
+                    });
+                }else if(tipo == 'apellidos'){
+                    let vendedores = await Admin.find({apellidos: new RegExp(filtro, 'i')});
+                    res.status(200).send({
+                        data: vendedores
+                    });
+                }
+            }
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+const registro_vendedores_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+
+            // var data = req.body;
+
+            // bcrypt.hash(data.password, null, null, async function (err, hash) {
+            //     if(hash){
+            //         data.password = hash;
+            //         let reg = await Admin.create(data);
+            //         res.status(200).send({data: reg});
+            //     }else{
+            //         res.status(200).send({message: 'Hubo un error en el servidor (bcrypt password failed)', data: undefined});
+            //     }
+            // });
+
+            // Verificar si existe correo
+
+            var data = req.body;
+
+            var admins_arr = [];
+
+            admins_arr = await Admin.find({email:data.email});
+
+            if(admins_arr.length == 0){
+
+                if(data.password){
+                    bcrypt.hash(data.password, null, null, async function (err, hash) {
+                        if(hash){
+                            data.password = hash;
+                            var reg = await Admin.create(data);
+                            res.status(200).send({data: reg});
+                        }else{
+                            res.status(200).send({message: 'Error Server', data: undefined})
+                        }
+                    })
+                }else{
+                    res.status(200).send({message: 'No hay una contraseña', data: undefined});
+                }
+            
+            }else{
+                res.status(200).send({message: 'El correo ya existe en la base de datos', data:undefined});
+            }
+
+        }
+    }
+}
+
 module.exports = {
     registro_admin,
-    login_admin
+    login_admin,
+    listar_vendedores_filtro_admin,
+    registro_vendedores_admin
 }

@@ -11,6 +11,9 @@ var AdminSchema = schema({
     telefono: {type: String, required: true},
     rol: {type: String,  required: true},
     dni: {type: String, required: true},
+    id_local: {type: String, required: false},
+    nombre_local: {type: String, required: false}
+
 });
 
 module.exports = mongoose.model('admin', AdminSchema);

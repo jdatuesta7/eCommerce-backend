@@ -59,7 +59,7 @@ const login_cliente = async function (req, res) {
 }
 
 const listar_clientes_filtro_admin = async function (req, res) {
-    console.log(req.user);
+    // console.log(req.user);
     if(req.user){
         if(req.user.role == 'admin'){
             let tipo = req.params['tipo'];
@@ -91,8 +91,56 @@ const listar_clientes_filtro_admin = async function (req, res) {
     }
 }
 
+const registro_clientes_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+            
+            // var data = req.body;
+
+            // bcrypt.hash(data.password, null, null, async function (err, hash) {
+            //     if(hash){
+            //         data.password = hash;
+            //         let reg = await Cliente.create(data);
+            //         res.status(200).send({data: reg});
+            //     }else{
+            //         res.status(200).send({message: 'Hubo un error en el servidor (bcrypt password failed)', data: undefined});
+            //     }
+            // });
+
+            // Verificar si existe correo
+
+            var data = req.body;
+
+            var clientes_arr = [];
+            clientes_arr = await Cliente.find({email:data.email});
+        
+            if(clientes_arr.length == 0){
+        
+                if(data.password){
+                    bcrypt.hash(data.password, null, null, async function (err, hash) {
+                        if(hash){
+                            data.password = hash;
+                            var reg = await Cliente.create(data);
+                            res.status(200).send({data: reg});
+                        }else{
+                            res.status(200).send({message: 'Error Server', data: undefined})
+                        }
+                    })
+                }else{
+                    res.status(200).send({message: 'No hay una contraseña', data: undefined});
+                }
+               
+            }else{
+                res.status(200).send({message: 'El correo ya existe en la base de datos', data:undefined});
+            }
+
+        }
+    }
+}
+
 module.exports = {
     registro_cliente,
     login_cliente,
-    listar_clientes_filtro_admin
+    listar_clientes_filtro_admin,
+    registro_clientes_admin
 }
