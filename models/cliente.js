@@ -14,6 +14,7 @@ var clienteSchema = schema({
     genero: {type: String, required: true},
     f_nacimiento: {type: String, required: true},
     dni: {type: String, required: true},
+    createdAt : {type: Date, default: Date.now, required: true}
 });
 
 module.exports = mongoose.model('cliente', clienteSchema);

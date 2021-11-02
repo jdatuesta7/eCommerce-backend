@@ -191,11 +191,24 @@ const actualizar_cliente_admin = async function (req, res) {
     }
 }
 
+const eliminar_cliente_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+            var idCliente = req.params['id'];
+
+            let reg = await Cliente.findByIdAndRemove({_id: idCliente});
+
+            res.status(200).send({data : reg});
+        }
+    }
+}
+
 module.exports = {
     registro_cliente,
     login_cliente,
     listar_clientes_filtro_admin,
     registro_clientes_admin,
     obtener_cliente_admin,
-    actualizar_cliente_admin
+    actualizar_cliente_admin,
+    eliminar_cliente_admin
 }
