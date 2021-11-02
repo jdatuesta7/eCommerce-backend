@@ -134,7 +134,60 @@ const registro_clientes_admin = async function (req, res) {
                 res.status(200).send({message: 'El correo ya existe en la base de datos', data:undefined});
             }
 
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
         }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+const obtener_cliente_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+
+            let idCliente = req.params['id'];
+
+            try {
+                let cliente = await Cliente.findById({_id: idCliente});
+                res.status(200).send({data: cliente});
+            } catch (error) {
+                res.status(200).send({message:'CustomerNotFound' ,data: undefined});
+            }
+
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+const actualizar_cliente_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+            
+            var idCliente = req.params['id'];
+            var data = req.body;
+            
+            var cliente = await Cliente.findByIdAndUpdate({_id: idCliente},{
+                nombres : data.nombres,
+                apellidos : data.apellidos,
+                ciudad : data.ciudad,
+                email : data.email,
+                telefono : data.telefono,
+                genero : data.genero,
+                f_nacimiento : data.f_nacimiento,
+                dni : data.dni
+            });
+
+            res.status(200).send({data: cliente});
+
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
     }
 }
 
@@ -142,5 +195,7 @@ module.exports = {
     registro_cliente,
     login_cliente,
     listar_clientes_filtro_admin,
-    registro_clientes_admin
+    registro_clientes_admin,
+    obtener_cliente_admin,
+    actualizar_cliente_admin
 }
