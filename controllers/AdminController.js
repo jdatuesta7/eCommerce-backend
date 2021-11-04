@@ -140,9 +140,75 @@ const registro_vendedores_admin = async function (req, res) {
     }
 }
 
+const obtener_vendedor_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+
+            var idVendedor = req.params['id'];
+
+            try {
+                var vendedor = await Admin.findById({_id: idVendedor});
+                res.status(200).send({data: vendedor});
+            } catch (error) {
+                res.status(200).send({message:'VendedorNotFound' ,data: undefined});
+            }
+
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+const actualizar_vendedor_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+            
+            var idVendedor = req.params['id'];
+            var data = req.body;
+            
+            var vendedor = await Admin.findByIdAndUpdate({_id: idVendedor},{
+                nombres : data.nombres,
+                apellidos : data.apellidos,
+                email : data.email,
+                passowrd : data.password,
+                telefono : data.telefono,
+                rol: data.rol,
+                dni: data.dni,
+                id_local: data.id_local,
+                nombre_local: data.nombre_local,
+                genero : data.genero,
+            });
+
+            res.status(200).send({data: vendedor});
+
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+const eliminar_vendedor_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin'){
+            var idVendedor = req.params['id'];
+
+            var reg = await Admin.findByIdAndRemove({_id: idVendedor});
+
+            res.status(200).send({data : reg});
+        }
+    }
+}
+
 module.exports = {
     registro_admin,
     login_admin,
     listar_vendedores_filtro_admin,
-    registro_vendedores_admin
+    registro_vendedores_admin,
+    obtener_vendedor_admin,
+    actualizar_vendedor_admin,
+    eliminar_vendedor_admin
 }
