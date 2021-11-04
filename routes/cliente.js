@@ -14,5 +14,9 @@ api.post('/registro_cliente_admin', auth.auth, clienteController.registro_client
 api.get('/obtener_cliente_admin/:id', auth.auth, clienteController.obtener_cliente_admin);
 api.put('/actualizar_cliente_admin/:id', auth.auth, clienteController.actualizar_cliente_admin);
 api.delete('/eliminar_cliente_admin/:id', auth.auth, clienteController.eliminar_cliente_admin);
+api.get('/obtener_vendedor_admin/:id', auth.auth, clienteController.obtener_vendedor_admin);
+api.put('/actualizar_vendedor_admin/:id', auth.auth, clienteController.actualizar_vendedor_admin);
+api.delete('/eliminar_vendedor_admin/:id', auth.auth, clienteController.eliminar_vendedor_admin);
+
 
 module.exports = api;
