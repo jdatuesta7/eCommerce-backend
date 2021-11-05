@@ -167,21 +167,38 @@ const actualizar_cliente_admin = async function (req, res) {
     if(req.user){
         if(req.user.role == 'admin'){
             
-            var idCliente = req.params['id'];
-            var data = req.body;
+            const idCliente = req.params['id'];
+            const params = req.body;
             
-            var cliente = await Cliente.findByIdAndUpdate({_id: idCliente},{
-                nombres : data.nombres,
-                apellidos : data.apellidos,
-                ciudad : data.ciudad,
-                email : data.email,
-                telefono : data.telefono,
-                genero : data.genero,
-                f_nacimiento : data.f_nacimiento,
-                dni : data.dni
-            });
+            try {
 
-            res.status(200).send({data: cliente});
+                Cliente.findById(idCliente).exec((err, data) => {
+                    if(err || !data){
+                        return res.status(404).send({status: 'error', message: 'No se ha encontrado el cliente'});
+                    }
+
+                    Cliente.findOne({email: params.email.toLowerCase()}, (err, data)=>{
+                        if(err){
+                            return res.status(500).send({message: 'Error al intentar actualizar datos'});
+                        }
+
+                        if(data && data.email == params.email && data._id != idCliente){
+                            return res.status(400).send({message: 'El email ya esta registrado.'});
+                        }else{
+                            Cliente.findByIdAndUpdate({_id: idCliente}, params, {new: true}, (err, data)=>{
+                                if(err || !data){
+                                    return res.status(500).send({status: 'error', message: "Error al actualizar usuario"});
+                                }
+                                return res.status(200).send({status: 'success', message: 'Usuario actualizado', data:data});
+                            })
+                        }
+                    })
+                });
+
+            } catch (error) {
+                console.log(error);
+                res.status(500).send({message: 'Ha ocurrido un error, intenta de nuevo'});
+            }
 
         }else{
             res.status(500).send({message: 'UnauthorizedAccess'});
