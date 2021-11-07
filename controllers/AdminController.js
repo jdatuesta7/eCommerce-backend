@@ -96,20 +96,6 @@ const registro_vendedores_admin = async function (req, res) {
     if(req.user){
         if(req.user.role == 'admin'){
 
-            // var data = req.body;
-
-            // bcrypt.hash(data.password, null, null, async function (err, hash) {
-            //     if(hash){
-            //         data.password = hash;
-            //         let reg = await Admin.create(data);
-            //         res.status(200).send({data: reg});
-            //     }else{
-            //         res.status(200).send({message: 'Hubo un error en el servidor (bcrypt password failed)', data: undefined});
-            //     }
-            // });
-
-            // Verificar si existe correo
-
             var data = req.body;
 
             var admins_arr = [];
