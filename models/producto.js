@@ -15,6 +15,7 @@ var productoSchema = schema({
     nventas: {type: Number, default: 0, required: true},
     categoria: {type: String, required: true},
     estado: {type: String, default: 'Edicion', required: true},
+    admin : {type: schema.ObjectId, ref: 'admin', required: true},
     createdAt : {type: Date, default: Date.now, required: true}
 });
 
