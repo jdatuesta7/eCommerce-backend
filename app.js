@@ -9,6 +9,7 @@ var cliente_route = require('./routes/cliente');
 var admin_route = require('./routes/admin');
 var producto_route = require('./routes/producto');
 var cupon_route = require('./routes/cupon');
+var categorias_route = require('./routes/categorias');
 
 const bodyParser = require('body-parser');
 
@@ -38,6 +39,7 @@ app.use('/api',cliente_route);
 app.use('/api',admin_route);
 app.use('/api',producto_route);
 app.use('/api',cupon_route);
+app.use('/api',categorias_route);
 
 
 module.exports = app;

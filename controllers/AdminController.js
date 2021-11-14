@@ -122,7 +122,11 @@ const registro_vendedores_admin = async function (req, res) {
                 res.status(200).send({message: 'El correo ya existe en la base de datos', data:undefined});
             }
 
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
         }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
     }
 }
 
