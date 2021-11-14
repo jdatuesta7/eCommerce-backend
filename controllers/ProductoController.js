@@ -105,10 +105,13 @@ const obtener_producto = async function (req, res) {
 const listar_inventario_producto = async function (req, res) {
     if(req.user){
         if(req.user.role == 'admin' || req.user.role == 'vendedor'){
+           
             let idProducto = req.params['id'];
 
-            let inventarios = Inventario.findById({ producto: idProducto});
+            let inventarios = await Inventario.find({ producto: idProducto}).populate('admin').sort({createdAt: -1});
+
             res.status(200).send({data: inventarios});
+            
         }else{
             res.status(500).send({message: 'UnauthorizedAccess'});
         }
@@ -117,10 +120,65 @@ const listar_inventario_producto = async function (req, res) {
     }
 }
 
+const eliminar_inventario_producto = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin' || req.user.role == 'vendedor'){
+           
+            let idInventario = req.params['id'];
+            
+            let inventarioEliminado = await Inventario.findByIdAndDelete({_id: idInventario});
+
+            let producto = await Producto.findById({_id: inventarioEliminado.producto});
+
+            let nuevo_stock = parseInt(producto.stock) - parseInt(inventarioEliminado.cantidad);
+
+            let productoActualizado = await Producto.findByIdAndUpdate({_id: inventarioEliminado.producto}, {
+                stock : nuevo_stock
+            });
+
+            res.status(200).send({data: productoActualizado});
+            
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+const registro_inventario_producto = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin' || req.user.role == 'vendedor'){
+           
+            let data = req.body;
+            data.admin = req.user.sub;
+
+            let inventario = await Inventario.create(data);
+
+            let producto = await Producto.findById({_id: inventario.producto});
+            
+            let nuevo_stock = parseInt(producto.stock) + parseInt(inventario.cantidad);
+
+            let productoActualizado = await Producto.findByIdAndUpdate({_id: inventario.producto}, {
+                stock : nuevo_stock
+            });
+
+            res.status(200).send({data: inventario});
+            
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }  
+}
+
 module.exports = {
     registro_producto,
     listar_productos,
     obtener_portada,
     obtener_producto,
-    listar_inventario_producto
+    listar_inventario_producto,
+    eliminar_inventario_producto,
+    registro_inventario_producto
 }
