@@ -4,6 +4,7 @@ var Cliente = require('../models/cliente');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../helpers/jwt');
 
+// METODOS PUBLICOS
 const registro_cliente = async function (req, res) {
 
     var data = req.body;
@@ -58,6 +59,24 @@ const login_cliente = async function (req, res) {
     }
 }
 
+const obtener_cliente_guest = async function (req, res) {
+
+    if(req.user){
+        let idCliente = req.params['id'];
+
+        try {
+            let cliente = await Cliente.findById({_id: idCliente});
+            res.status(200).send({data: cliente});
+        } catch (error) {
+            res.status(200).send({message:'CustomerNotFound' ,data: undefined});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+
+}
+
+// METODOS PANEL ADMINISTRADOR
 const listar_clientes_filtro_admin = async function (req, res) {
     // console.log(req.user);
     if(req.user){
@@ -217,5 +236,6 @@ module.exports = {
     registro_clientes_admin,
     obtener_cliente_admin,
     actualizar_cliente_admin,
-    eliminar_cliente_admin
+    eliminar_cliente_admin,
+    obtener_cliente_guest
 }
