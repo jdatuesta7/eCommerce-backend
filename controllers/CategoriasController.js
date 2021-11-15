@@ -42,7 +42,16 @@ const obtener_categorias_admin = async function (req, res) {
     }
 }
 
+const obtener_categorias_publico = async function (req, res) {
+    const id = '61918cba6bd61d63b5a3a4d6';
+
+    let categorias = await Categorias.findById({_id: id});
+
+    res.status(200).send({data: categorias});
+}
+
 module.exports = {
     actualizar_categorias_admin,
-    obtener_categorias_admin
+    obtener_categorias_admin,
+    obtener_categorias_publico
 }
