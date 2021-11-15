@@ -101,6 +101,59 @@ const obtener_producto = async function (req, res) {
     }
 }
 
+const agregar_imagen_galeria_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin' || req.user.role == 'vendedor'){
+            let idProducto = req.params['id'];
+            console.log(idProducto);
+            let data = req.body;
+
+            let img_path = req.files.imagen.path;
+            let name = img_path.split('\\');
+            let imagen_name = name[2];
+
+            let reg = await Producto.findByIdAndUpdate({_id: idProducto},{ $push: {galeria: {
+                imagen: imagen_name,
+                _id: data._id
+            }}});
+
+            res.status(200).send({data: reg});
+            
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+const eliminar_imagen_galeria_admin = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin' || req.user.role == 'vendedor'){
+            let idProducto = req.params['id'];
+            let data = req.body;
+
+            let reg = await Producto.findByIdAndUpdate({_id: idProducto},{$pull: {galeria: {_id: data._id}}});
+
+            res.status(200).send({data: reg});
+            
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
+//METODOS PUBLICOS
+const listar_productos_publicos = async function (req, res) {
+    
+    let filtro = req.params['filtro'];
+    let productos = await Producto.find({titulo: new RegExp(filtro, 'i')});
+    res.status(200).send({data: productos});
+
+}
+
 //INVENTARIO
 const listar_inventario_producto = async function (req, res) {
     if(req.user){
@@ -180,5 +233,8 @@ module.exports = {
     obtener_producto,
     listar_inventario_producto,
     eliminar_inventario_producto,
-    registro_inventario_producto
+    registro_inventario_producto,
+    listar_productos_publicos,
+    agregar_imagen_galeria_admin,
+    eliminar_imagen_galeria_admin
 }
