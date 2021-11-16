@@ -12,6 +12,7 @@ api.post('/login_cliente', clienteController.login_cliente);
 api.get('/listar_clientes_filtro_admin',clienteController.listar_clientes_filtro_admin);
 
 api.get('/obtener_cliente_guest/:id', auth.auth, clienteController.obtener_cliente_guest);
+api.put('/actualizar_perfil_cliente_guest/:id', auth.auth, clienteController.actualizar_perfil_cliente_guest);
 
 //RUTAS PANEL ADMINISTRADOR
 api.get('/listar_clientes_filtro_admin/:tipo/:filtro?', auth.auth, clienteController.listar_clientes_filtro_admin);
