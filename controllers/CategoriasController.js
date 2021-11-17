@@ -10,7 +10,7 @@ const actualizar_categorias_admin = async function (req, res) {
 
             let data = req.body;
 
-            let reg = await Categorias.findByIdAndUpdate({_id: "6193079e0d630bb469782304"}, {
+            let reg = await Categorias.findByIdAndUpdate({_id: "61918cba6bd61d63b5a3a4d6"}, {
                 categorias : data.categorias
             });
 
@@ -28,7 +28,7 @@ const obtener_categorias_admin = async function (req, res) {
     if(req.user){
         if(req.user.role == 'admin'){
 
-            const id = '6193079e0d630bb469782304';
+            const id = '61918cba6bd61d63b5a3a4d6';
 
             let categorias = await Categorias.findById({_id: id});
 
@@ -43,7 +43,7 @@ const obtener_categorias_admin = async function (req, res) {
 }
 
 const obtener_categorias_publico = async function (req, res) {
-    const id = '6193079e0d630bb469782304';
+    const id = '61918cba6bd61d63b5a3a4d6';
 
     let categorias = await Categorias.findById({_id: id});
 

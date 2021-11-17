@@ -100,6 +100,7 @@ const obtener_producto = async function (req, res) {
         res.status(500).send({message: 'UnauthorizedAccess'});
     }
 }
+
 const actualizar_producto = async function (req, res) {
     if(req.user){
         if(req.user.role == 'admin' || req.user.role == 'vendedor'){
