@@ -199,6 +199,18 @@ const listar_productos_publicos = async function (req, res) {
 
 }
 
+const listar_productos_nuevos_publicos = async function (req, res) {
+    let productos = await Producto.find().sort({createdAt: -1}).limit(12);
+    res.status(200).send({data: productos});
+}
+
+const listar_productos_tendencia_publicos = async function (req, res) {
+    let productos = await Producto.find().sort({nventas: -1}).limit(8);
+    res.status(200).send({data: productos});
+}
+
+
+
 //INVENTARIO
 const listar_inventario_producto = async function (req, res) {
     if(req.user){
@@ -282,5 +294,7 @@ module.exports = {
     listar_productos_publicos,
     agregar_imagen_galeria_admin,
     eliminar_imagen_galeria_admin,
-    actualizar_producto
+    actualizar_producto,
+    listar_productos_nuevos_publicos,
+    listar_productos_tendencia_publicos
 }
