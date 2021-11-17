@@ -7,7 +7,7 @@ let Admin = require('../models/admin');
 let fs = require('fs');
 let path = require('path');
 
-//PRODUCTOS
+//METODOS PANEL ADMIN
 const registro_producto = async function (req, res) {
     if(req.user){
         if(req.user.role == 'admin'){
@@ -149,7 +149,7 @@ const eliminar_imagen_galeria_admin = async function (req, res) {
 const listar_productos_publicos = async function (req, res) {
     
     let filtro = req.params['filtro'];
-    let productos = await Producto.find({titulo: new RegExp(filtro, 'i')});
+    let productos = await Producto.find({titulo: new RegExp(filtro, 'i')}).populate('admin');
     res.status(200).send({data: productos});
 
 }
