@@ -100,6 +100,50 @@ const obtener_producto = async function (req, res) {
         res.status(500).send({message: 'UnauthorizedAccess'});
     }
 }
+const actualizar_producto = async function (req, res) {
+    if(req.user){
+        if(req.user.role == 'admin' || req.user.role == 'vendedor'){
+            
+            const idProducto = req.params['id'];
+            const params = req.body;
+            
+            try {
+
+                Producto.findById(idProducto).exec((err, data) => {
+                    if(err || !data){
+                        return res.status(404).send({status: 'error', message: 'No se ha encontrado el producto'});
+                    }
+
+                    Producto.findOne({id: params.id.toLowerCase()}, (err, data)=>{
+                        if(err){
+                            return res.status(500).send({message: 'Error al intentar actualizar datos'});
+                        }
+
+                        if(data && data.id == params.id && data._id != idProducto){
+                            return res.status(400).send({message: 'El producto ya se encuentra registrado.'});
+                        }else{
+                            Producto.findByIdAndUpdate({_id: idProducto}, params, {new: true}, (err, data)=>{
+                                if(err || !data){
+                                    return res.status(500).send({status: 'error', message: "Error al actualizar producto"});
+                                }
+                                return res.status(200).send({status: 'success', message: 'Usuario actualizado', data:data});
+                            })
+                        }
+                    })
+                });
+
+            } catch (error) {
+                console.log(error);
+                res.status(500).send({message: 'Ha ocurrido un error, intenta de nuevo'});
+            }
+
+        }else{
+            res.status(500).send({message: 'UnauthorizedAccess'});
+        }
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
 
 const agregar_imagen_galeria_admin = async function (req, res) {
     if(req.user){
@@ -236,5 +280,6 @@ module.exports = {
     registro_inventario_producto,
     listar_productos_publicos,
     agregar_imagen_galeria_admin,
-    eliminar_imagen_galeria_admin
+    eliminar_imagen_galeria_admin,
+    actualizar_producto
 }
