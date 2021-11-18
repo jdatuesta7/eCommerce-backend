@@ -13,7 +13,8 @@ var AdminSchema = schema({
     dni: {type: String, required: true},
     id_local: {type: String, required: false},
     nombre_local: {type: String, required: false},
-    descripcion: {type: String, required: false}
+    descripcion: {type: String, required: false},
+    logo: {type: String, required: true},
 });
 
 module.exports = mongoose.model('admin', AdminSchema);

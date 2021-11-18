@@ -68,20 +68,6 @@ const listar_productos = async function (req, res) {
     }
 }
 
-const obtener_portada = async function (req, res) {
-    var img = req.params['img'];
-    
-    fs.stat('./uploads/productos/'+img, function (err) {
-        if(!err){
-            let path_img = './uploads/productos/'+img;
-            res.status(200).sendFile(path.resolve(path_img));
-        }else{
-            let path_img = './uploads/default-placeholder.png';
-            res.status(200).sendFile(path.resolve(path_img));
-        }
-    });
-}   
-
 const obtener_producto = async function (req, res) {
     if(req.user){
         if(req.user.role == 'admin' || req.user.role == 'vendedor'){
@@ -191,12 +177,24 @@ const eliminar_imagen_galeria_admin = async function (req, res) {
 }
 
 //METODOS PUBLICOS
-const listar_productos_publicos = async function (req, res) {
+const obtener_portada = async function (req, res) {
+    var img = req.params['img'];
     
+    fs.stat('./uploads/productos/'+img, function (err) {
+        if(!err){
+            let path_img = './uploads/productos/'+img;
+            res.status(200).sendFile(path.resolve(path_img));
+        }else{
+            let path_img = './uploads/default-placeholder.png';
+            res.status(200).sendFile(path.resolve(path_img));
+        }
+    });
+} 
+
+const listar_productos_publicos = async function (req, res) {
     let filtro = req.params['filtro'];
     let productos = await Producto.find({titulo: new RegExp(filtro, 'i')}).populate('admin');
     res.status(200).send({data: productos});
-
 }
 
 const listar_productos_nuevos_publicos = async function (req, res) {
@@ -209,7 +207,11 @@ const listar_productos_tendencia_publicos = async function (req, res) {
     res.status(200).send({data: productos});
 }
 
-
+const listar_productos_vendedor_publicos = async function (req, res) {
+    let id = req.params['local'];
+    let productos = await Producto.find({admin: id});
+    res.status(200).send({data: productos});
+}
 
 //INVENTARIO
 const listar_inventario_producto = async function (req, res) {
@@ -296,5 +298,6 @@ module.exports = {
     eliminar_imagen_galeria_admin,
     actualizar_producto,
     listar_productos_nuevos_publicos,
-    listar_productos_tendencia_publicos
+    listar_productos_tendencia_publicos,
+    listar_productos_vendedor_publicos
 }

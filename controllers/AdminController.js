@@ -4,6 +4,9 @@ var Admin = require('../models/admin');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../helpers/jwt');
 
+let fs = require('fs');
+let path = require('path');
+
 
 const registro_admin = async function (req, res) {
 
@@ -97,6 +100,13 @@ const registro_vendedores_admin = async function (req, res) {
         if(req.user.role == 'admin'){
 
             var data = req.body;
+
+            let img_path = req.files.logo.path;
+            let name = img_path.split('\\');
+            let logo_name = name[2];
+
+            data.logo = logo_name;
+            console.log(data);
 
             var admins_arr = [];
 
@@ -207,6 +217,38 @@ const eliminar_vendedor_admin = async function (req, res) {
     }
 }
 
+const listar_vendedores_filtro_publico = async function (req, res) {
+
+    let filtro = req.params['filtro'];
+    let vendedores = await Admin.find({nombre_local: new RegExp(filtro, 'i'), rol: 'vendedor'});
+    res.status(200).send({data: vendedores});
+    
+}
+
+const obtener_logo = async function (req, res) {
+    var img = req.params['img'];
+    
+    fs.stat('./uploads/vendedores/'+img, function (err) {
+        if(!err){
+            let path_img = './uploads/vendedores/'+img;
+            res.status(200).sendFile(path.resolve(path_img));
+        }else{
+            let path_img = './uploads/default-placeholder.png';
+            res.status(200).sendFile(path.resolve(path_img));
+        }
+    });
+} 
+
+const obtener_vendedor_publico = async function (req, res) {
+    var idVendedor = req.params['id'];
+    try {
+        var vendedor = await Admin.findById({_id: idVendedor});
+        res.status(200).send({data: vendedor});
+    } catch (error) {
+        res.status(200).send({message:'VendedorNotFound' ,data: undefined});
+    }
+}
+
 module.exports = {
     registro_admin,
     login_admin,
@@ -214,5 +256,8 @@ module.exports = {
     registro_vendedores_admin,
     obtener_vendedor_admin,
     actualizar_vendedor_admin,
-    eliminar_vendedor_admin
+    eliminar_vendedor_admin,
+    listar_vendedores_filtro_publico,
+    obtener_logo,
+    obtener_vendedor_publico
 }
