@@ -26,5 +26,6 @@ api.get('/listar_productos_publicos/:filtro?', productoController.listar_product
 api.get('/listar_productos_nuevos_publicos', productoController.listar_productos_nuevos_publicos);
 api.get('/listar_productos_tendencia_publicos', productoController.listar_productos_tendencia_publicos);
 api.get('/listar_productos_vendedor_publicos/:local', productoController.listar_productos_vendedor_publicos);
+api.get('/obtener_producto_publico/:slug', productoController.obtener_producto_publico);
 
 module.exports = api;

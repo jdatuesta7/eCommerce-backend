@@ -213,6 +213,16 @@ const listar_productos_vendedor_publicos = async function (req, res) {
     res.status(200).send({data: productos});
 }
 
+const obtener_producto_publico = async function (req, res) {
+    try {
+        let slug = req.params['slug'];
+        let producto = await Producto.findOne({ slug : slug}).populate('admin');
+        res.status(200).send({data: producto});
+    } catch (error) {
+        res.status(200).send({message:'ProductNotFound' ,data: undefined});
+    }
+}
+
 //INVENTARIO
 const listar_inventario_producto = async function (req, res) {
     if(req.user){
@@ -299,5 +309,6 @@ module.exports = {
     actualizar_producto,
     listar_productos_nuevos_publicos,
     listar_productos_tendencia_publicos,
-    listar_productos_vendedor_publicos
+    listar_productos_vendedor_publicos,
+    obtener_producto_publico
 }
