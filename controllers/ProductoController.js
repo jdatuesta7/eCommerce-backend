@@ -193,7 +193,13 @@ const obtener_portada = async function (req, res) {
 
 const listar_productos_publicos = async function (req, res) {
     let filtro = req.params['filtro'];
-    let productos = await Producto.find({titulo: new RegExp(filtro, 'i')}).populate('admin');
+    let productos = await Producto.find({titulo: new RegExp(filtro, 'i')}).populate('admin').sort({createdAt: -1});
+    res.status(200).send({data: productos});
+}
+
+const listar_productos_recomendados_publicos = async function (req, res) {
+    let categoria = req.params['categoria'];
+    let productos = await Producto.find({categoria: categoria}).populate('admin').sort({nventas: -1}).limit(8);
     res.status(200).send({data: productos});
 }
 
@@ -310,5 +316,6 @@ module.exports = {
     listar_productos_nuevos_publicos,
     listar_productos_tendencia_publicos,
     listar_productos_vendedor_publicos,
-    obtener_producto_publico
+    obtener_producto_publico,
+    listar_productos_recomendados_publicos
 }
