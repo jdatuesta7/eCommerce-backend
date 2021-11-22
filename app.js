@@ -5,6 +5,23 @@ var app = express();
 var mongoose = require('mongoose');
 var port = process.env.port || 4201;
 
+var server = require('http').createServer(app);
+var io = require('socket.io')(server, {
+    cors: {origin : '*'}
+});
+
+io.on('connection', function (socket) {
+    socket.on('delete-carrito', function (data) {
+        io.emit('new-carrito', data);
+        console.log(data);
+    });
+
+    socket.on('add-carrito-add', function (data) {
+        io.emit('new-carrito-add', data);
+        console.log(data);
+    });
+})
+
 var cliente_route = require('./routes/cliente');
 var admin_route = require('./routes/admin');
 var producto_route = require('./routes/producto');
@@ -19,7 +36,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/tienda',{useUnifiedTopology: true, u
     if(err){
         console.log(err);
     }else{
-        app.listen(port, function () {
+        server.listen(port, function () {
             console.log('Servidor corriendo en el puerto ' + port); 
         });
     }
