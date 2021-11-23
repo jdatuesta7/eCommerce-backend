@@ -8,6 +8,7 @@ var auth = require('../middleware/authenticate');
 var multiparty = require('connect-multiparty');
 var path = multiparty({uploadDir: './uploads/vendedores'});
 
+api.get('/', adminController.root);
 api.post('/registro_admin', adminController.registro_admin);
 api.post('/login_admin', adminController.login_admin);
 api.get('/listar_vendedores_filtro_admin/:tipo/:filtro?', auth.auth, adminController.listar_vendedores_filtro_admin);

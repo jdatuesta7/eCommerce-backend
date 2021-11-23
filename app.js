@@ -2,6 +2,7 @@
 
 var express = require('express');
 var app = express();
+
 var mongoose = require('mongoose');
 app.set('port', process.env.port || 4201);
 
@@ -65,6 +66,7 @@ app.use('/api',producto_route);
 app.use('/api',cupon_route);
 app.use('/api',categorias_route);
 app.use('/api',carrito_route);
+app.use(admin_route);
 
 
 module.exports = app;

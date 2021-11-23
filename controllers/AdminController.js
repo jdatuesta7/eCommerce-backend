@@ -7,6 +7,9 @@ var jwt = require('../helpers/jwt');
 let fs = require('fs');
 let path = require('path');
 
+const root = async function (req, res) {
+    res.status(200).send('WORKGIN ON ROOT !!!');
+}
 
 const registro_admin = async function (req, res) {
 
@@ -259,5 +262,6 @@ module.exports = {
     eliminar_vendedor_admin,
     listar_vendedores_filtro_publico,
     obtener_logo,
-    obtener_vendedor_publico
+    obtener_vendedor_publico,
+    root
 }
