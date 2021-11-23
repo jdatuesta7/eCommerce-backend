@@ -42,6 +42,7 @@ mongoose.connect(databaseNube,{useUnifiedTopology: true, useNewUrlParser: true},
     }else{
         server.listen(app.get('port'), function () {
             console.log('Servidor corriendo en el puerto ' + app.get('port')); 
+            res.send("WORKING!!!");
         });
     }
 })
