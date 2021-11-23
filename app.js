@@ -37,6 +37,7 @@ const databaseNube = 'mongodb+srv://jatuesta99:1045761181@ecommercedb.crsxg.mong
 
 mongoose.connect(databaseNube,{useUnifiedTopology: true, useNewUrlParser: true},(err, res)=>{
     if(err){
+        console.log('ERROR ----------------- ');
         console.log(err);
     }else{
         server.listen(app.get('port'), function () {
