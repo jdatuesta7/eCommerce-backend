@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 
 var mongoose = require('mongoose');
-app.set('port', process.env.port || 4201);
+app.set('port', process.env.PORT || 4201);
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server, {
