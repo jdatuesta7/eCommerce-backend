@@ -32,7 +32,7 @@ var carrito_route = require('./routes/carrito');
 
 const bodyParser = require('body-parser');
 
-const databaseLocal = 'mongodb://127.0.0.1:27017/tienda';
+// const databaseLocal = 'mongodb://127.0.0.1:27017/tienda';
 const databaseNube = 'mongodb+srv://jatuesta99:1045761181@ecommercedb.crsxg.mongodb.net/tienda?retryWrites=true&w=majority';
 
 mongoose.connect(databaseNube,{useUnifiedTopology: true, useNewUrlParser: true},(err, res)=>{
