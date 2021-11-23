@@ -37,12 +37,12 @@ const databaseNube = 'mongodb+srv://jatuesta99:1045761181@ecommercedb.crsxg.mong
 
 mongoose.connect(databaseNube,{useUnifiedTopology: true, useNewUrlParser: true},(err, res)=>{
     if(err){
-        console.log('ERROR ----------------- ');
+        console.log('ERROR !!!!!!!!!!!!!!! ');
         console.log(err);
     }else{
+        console.log('WORKING !!!!!!!!!!!!!!! ');
         server.listen(app.get('port'), function () {
             console.log('Servidor corriendo en el puerto ' + app.get('port')); 
-            res.send("WORKING!!!");
         });
     }
 })
