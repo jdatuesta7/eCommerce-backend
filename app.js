@@ -3,7 +3,7 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
-var port = process.env.port || 4201;
+app.set('port', process.env.port || 4201);
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server, {
@@ -32,12 +32,15 @@ var carrito_route = require('./routes/carrito');
 
 const bodyParser = require('body-parser');
 
-mongoose.connect('mongodb://127.0.0.1:27017/tienda',{useUnifiedTopology: true, useNewUrlParser: true},(err, res)=>{
+const databaseLocal = 'mongodb://127.0.0.1:27017/tienda';
+const databaseNube = 'mongodb+srv://jatuesta99:1045761181@ecommercedb.crsxg.mongodb.net/tienda?retryWrites=true&w=majority';
+
+mongoose.connect(databaseNube,{useUnifiedTopology: true, useNewUrlParser: true},(err, res)=>{
     if(err){
         console.log(err);
     }else{
-        server.listen(port, function () {
-            console.log('Servidor corriendo en el puerto ' + port); 
+        server.listen(app.get('port'), function () {
+            console.log('Servidor corriendo en el puerto ' + app.get('port')); 
         });
     }
 })
