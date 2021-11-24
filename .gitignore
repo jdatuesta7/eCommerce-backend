@@ -1,4 +1,4 @@
 /node_modules
 
-/uploads/productos/*.jpg
-/uploads/vendedores/*.jpg
+# /uploads/productos/*.jpg
+# /uploads/vendedores/*.jpg
