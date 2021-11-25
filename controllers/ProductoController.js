@@ -209,7 +209,7 @@ const listar_productos_nuevos_publicos = async function (req, res) {
 }
 
 const listar_productos_tendencia_publicos = async function (req, res) {
-    let productos = await Producto.find().sort({nventas: -1}).limit(8);
+    let productos = await Producto.find().sort({nventas: -1}).limit(8).populate('admin');
     res.status(200).send({data: productos});
 }
 
