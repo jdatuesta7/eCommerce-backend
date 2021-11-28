@@ -4,6 +4,9 @@ var Cliente = require('../models/cliente');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../helpers/jwt');
 
+var Direccion = require('../models/direccion')
+
+
 const registro_cliente = async function (req, res) {
 
     var data = req.body;
