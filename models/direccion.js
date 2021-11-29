@@ -19,4 +19,4 @@ var DireccionSchema = schema({
     createdAt: {type: Date, default: Date.now, require: true}
 });
 
-module.exports = mongoose.model('carrito', CarritoSchema);
+module.exports = mongoose.model('direccion', DireccionSchema);
