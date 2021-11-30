@@ -43,8 +43,28 @@ const eliminar_carrito_cliente = async function (req, res) {
     }
 }
 
+const disminuir_carrito_cantidad = async function (req, res){
+    if(req.user){
+        let data = req.body;
+
+        let carrito_cliente = await Carrito.findOne({cliente: data.cliente, producto: data.producto});
+        
+        if(carrito_cliente){
+            let nuevaCantidad = parseInt(carrito_cliente.cantidad) - parseInt(data.cantidad);
+            let reg = await Carrito.findByIdAndUpdate({_id: carrito_cliente._id}, {cantidad: nuevaCantidad});
+            res.status(200).send({data: reg});
+        }else{
+            res.status(404).send({message: 'ElementNotFound'});
+        }
+
+    }else{
+        res.status(500).send({message: 'UnauthorizedAccess'});
+    }
+}
+
 module.exports = {
     agregar_carrito_cliente,
     obtener_carrito_cliente,
-    eliminar_carrito_cliente
+    eliminar_carrito_cliente,
+    disminuir_carrito_cantidad
 }
