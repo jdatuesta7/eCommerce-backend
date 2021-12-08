@@ -7,6 +7,7 @@ var secret = 'secret123';
 exports.auth = function(req, res, next){
 
     if(!req.headers.authorization){
+        console.log('NoHeadersError');
         return res.status(403).send({message: 'NoHeadersError'});
     }
 
@@ -16,15 +17,18 @@ exports.auth = function(req, res, next){
 
 
     if(segment.length != 3){
+        console.log('InvalidToken');
         return res.status(403).send({message: 'InvalidToken'});
     }else{
         try {
             var payload = jwt.decode(token, secret);
             // console.log(payload);
             if(payload.exp <= moment().unix()){
+                console.log('TokenExpired');
                 return res.status(403).send({message: 'TokenExpired'});
             }
         } catch (error) {
+            console.log('InvalidToken');
             return res.status(403).send({message: 'InvalidToken'});
         }
     }
